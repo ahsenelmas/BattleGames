@@ -11,6 +11,17 @@ public abstract class Character{
         this.experience = experience;
     }
 
+    public int getExperience() {
+        return experience;
+    }
+
+    public void levelUp(){
+        level++;
+        experience = 0;
+        healthPoints += 20;
+        System.out.println(name + " has leveled up to level " + level + "!");
+    }
+
     public boolean isAlive(){
         return healthPoints > 0;
     }
@@ -28,7 +39,7 @@ public abstract class Character{
     }
 
     public void gainExperience(int experience){
-        this.experience += xp;
+        this.experience += experience;
         if (experience >= 100){
             level++;
             experience -= 100;
