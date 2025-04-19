@@ -12,11 +12,11 @@ public class RiotAdventureApp {
         String username = scanner.nextLine();
 
         Player player = new Player(username);
-
         List<Character> heroes = database.getAvailableHeroes();
+
         System.out.println("\nAvailable Heroes:");
         for (int i = 0; i < heroes.size(); i++) {
-            System.out.println((i + 1) + ". " + heroes.get(i).toString());
+            System.out.println((i + 1) + ". " + heroes.get(i));
         }
 
         System.out.print("\nSelect your hero (enter number): ");
@@ -25,27 +25,28 @@ public class RiotAdventureApp {
 
         Character selectedHero = heroes.get(choice - 1);
         player.selectHero(selectedHero);
-
-        System.out.println("\nYou have selected " + selectedHero.getName() + "!");
-        System.out.println("\n--- Battle Start! ---");
+        System.out.println("\nYou have selected: " + selectedHero.getName() + "\n");
 
         boolean running = true;
         Random random = new Random();
 
         while (running && player.getSelectedHero().isAlive()) {
-            Enemy enemy = new Enemy("Minion", 80 + random.nextInt(40), 1 + random.nextInt(2), 30 + random.nextInt(20));
-            System.out.println("\nAn enemy \"" + enemy.getName() + "\" appears!");
+            Enemy enemy = new Enemy("Minion", 80 + random.nextInt(50), 1 + random.nextInt(3), 30 + random.nextInt(50));
+            System.out.println("\n--- A wild enemy \"" + enemy.getName() + "\" appears! ---");
 
             while (enemy.isAlive() && player.getSelectedHero().isAlive()) {
                 System.out.println("\nChoose action:");
                 System.out.println("1. Attack");
 
-                if (player.getSelectedHero() instanceof SpellCaster) {
+                Character hero = player.getSelectedHero();
+
+                if (hero instanceof SpellCaster) {
                     System.out.println("2. Cast Spell");
                 }
 
-                if (player.getSelectedHero() instanceof Warrior) {
-                    System.out.println("2. Defend");
+                if (hero instanceof Archer) {
+                    System.out.println("2. Power Shot");
+                    System.out.println("3. Dodge");
                 }
 
                 System.out.print("> ");
@@ -53,21 +54,20 @@ public class RiotAdventureApp {
                 scanner.nextLine();
 
                 if (action == 1) {
-                    player.getSelectedHero().attack(enemy);
-                } else if (action == 2 && player.getSelectedHero() instanceof SpellCaster) {
-                    ((SpellCaster) player.getSelectedHero()).castSpell(enemy);
-                } else if (action == 2 && player.getSelectedHero() instanceof Warrior) {
-
-                    System.out.println(player.getSelectedHero().getName() + " defends against the next attack!");
-
+                    hero.attack(enemy);
+                } else if (action == 2 && hero instanceof SpellCaster) {
+                    ((SpellCaster) hero).castSpell(enemy);
+                } else if (action == 2 && hero instanceof Archer) {
+                    ((Archer) hero).powerShot(enemy);
+                } else if (action == 3 && hero instanceof Archer) {
+                    ((Archer) hero).dodge();
                 } else {
                     System.out.println("Invalid action.");
-                    continue;
                 }
 
                 if (enemy.isAlive()) {
-                    enemy.attack(player.getSelectedHero());
-                    System.out.println("Current HP: " + player.getSelectedHero().getHealthPoints());
+                    enemy.attack(hero);
+                    System.out.println("Current HP: " + hero.getHealthPoints());
                 }
             }
 
@@ -91,7 +91,5 @@ public class RiotAdventureApp {
                 }
             }
         }
-
-        scanner.close();
     }
 }

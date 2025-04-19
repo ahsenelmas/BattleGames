@@ -30,6 +30,14 @@ public abstract class Character{
         return name;
     }
 
+    public void setHealthPoints(int healthPoints) {
+        this.healthPoints = healthPoints;
+    }
+
+    public int getLevel(){
+        return level;
+    }
+
     public int getHealthPoints(){
         return healthPoints;
     }
