@@ -16,7 +16,7 @@ public class RiotAdventureApp {
 
         System.out.println("\nAvailable Heroes:");
         for (int i = 0; i < heroes.size(); i++) {
-            System.out.println((i + 1) + ". " + heroes.get(i));
+            System.out.println((i + 1) + ". " + heroes.get(i).toString());
         }
 
         System.out.print("\nSelect your hero (enter number): ");
@@ -25,26 +25,28 @@ public class RiotAdventureApp {
 
         Character selectedHero = heroes.get(choice - 1);
         player.selectHero(selectedHero);
-        System.out.println("\nYou have selected: " + selectedHero.getName() + "\n");
+
+        System.out.println("\nYou have selected: " + selectedHero.getName() + "!");
 
         boolean running = true;
         Random random = new Random();
 
         while (running && player.getSelectedHero().isAlive()) {
             Enemy enemy = new Enemy("Minion", 80 + random.nextInt(50), 1 + random.nextInt(3), 30 + random.nextInt(50));
-            System.out.println("\n--- A wild enemy \"" + enemy.getName() + "\" appears! ---");
+            System.out.println("\nAn enemy \"" + enemy.getName() + "\" appears!");
 
             while (enemy.isAlive() && player.getSelectedHero().isAlive()) {
+                Character hero = player.getSelectedHero();
+
                 System.out.println("\nChoose action:");
                 System.out.println("1. Attack");
 
-                Character hero = player.getSelectedHero();
-
-                if (hero instanceof SpellCaster) {
+                if (hero instanceof Mage) {
                     System.out.println("2. Cast Spell");
-                }
-
-                if (hero instanceof Archer) {
+                } else if (hero instanceof Warrior) {
+                    System.out.println("2. Judgment Spin");
+                    System.out.println("3. Defend");
+                } else if (hero instanceof Archer) {
                     System.out.println("2. Power Shot");
                     System.out.println("3. Dodge");
                 }
@@ -55,12 +57,26 @@ public class RiotAdventureApp {
 
                 if (action == 1) {
                     hero.attack(enemy);
-                } else if (action == 2 && hero instanceof SpellCaster) {
-                    ((SpellCaster) hero).castSpell(enemy);
-                } else if (action == 2 && hero instanceof Archer) {
-                    ((Archer) hero).powerShot(enemy);
-                } else if (action == 3 && hero instanceof Archer) {
-                    ((Archer) hero).dodge();
+                } else if (hero instanceof Mage && action == 2) {
+                    ((Mage) hero).castSpell(enemy);
+                } else if (hero instanceof Warrior) {
+                    Warrior warrior = (Warrior) hero;
+                    if (action == 2) {
+                        warrior.judgmentSpin(enemy);
+                    } else if (action == 3) {
+                        warrior.defend();
+                    } else {
+                        System.out.println("Invalid action.");
+                    }
+                } else if (hero instanceof Archer) {
+                    Archer archer = (Archer) hero;
+                    if (action == 2) {
+                        archer.powerShot(enemy);
+                    } else if (action == 3) {
+                        archer.dodge();
+                    } else {
+                        System.out.println("Invalid action.");
+                    }
                 } else {
                     System.out.println("Invalid action.");
                 }
