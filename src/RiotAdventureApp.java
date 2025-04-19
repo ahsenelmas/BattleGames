@@ -39,17 +39,27 @@ public class RiotAdventureApp {
             while (enemy.isAlive() && player.getSelectedHero().isAlive()) {
                 System.out.println("\nChoose action:");
                 System.out.println("1. Attack");
+
                 if (player.getSelectedHero() instanceof SpellCaster) {
                     System.out.println("2. Cast Spell");
                 }
+
+                if (player.getSelectedHero() instanceof Warrior) {
+                    System.out.println("2. Defend");
+                }
+
                 System.out.print("> ");
                 int action = scanner.nextInt();
-                scanner.nextLine(); // consume newline
+                scanner.nextLine();
 
                 if (action == 1) {
                     player.getSelectedHero().attack(enemy);
                 } else if (action == 2 && player.getSelectedHero() instanceof SpellCaster) {
                     ((SpellCaster) player.getSelectedHero()).castSpell(enemy);
+                } else if (action == 2 && player.getSelectedHero() instanceof Warrior) {
+
+                    System.out.println(player.getSelectedHero().getName() + " defends against the next attack!");
+
                 } else {
                     System.out.println("Invalid action.");
                     continue;
