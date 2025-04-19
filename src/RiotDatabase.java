@@ -9,12 +9,13 @@ public class RiotDatabase {
     }
 
     private List<Character> fetchHeroes() {
-        List<Character> heroes = new ArrayList<>();
+        List<Character> availableHeroes = new ArrayList<>();
 
-        heroes.add(new Mage("Lux", 100, 1, 0, 50));
-        heroes.add(new Warrior("Garen", 150, 1, 0, 20));
+        availableHeroes.add(new Mage("Lux", 100, 1, 0, 50));
+        availableHeroes.add(new Warrior("Garen", 150, 1, 0, 20));
+        availableHeroes.add(new Archer("Archi", 120, 1, 0, 40));
 
-        return heroes;
+        return availableHeroes;
     }
 
     public List<Character> getAvailableHeroes() {
